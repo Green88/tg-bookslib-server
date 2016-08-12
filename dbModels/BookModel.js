@@ -6,7 +6,6 @@ var Schema = mongoose.Schema;
 
 var bookSchema = new Schema({
     bookId: String,
-    authorId: String,
     title: String,
     description: String,
     imageUrls: [String],
