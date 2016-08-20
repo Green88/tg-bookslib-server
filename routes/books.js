@@ -20,7 +20,7 @@ function getAllBooks(req, res, next) {
             return next(err);
         }
 
-        res.send({result: 'ok', payload: result});
+        res.send({result: 'ok', data: result});
     });
 }
 
@@ -31,7 +31,7 @@ function getBookById(req, res, next) {
             return next(err);
         }
 
-        res.send({result: 'ok', payload: result});
+        res.send({result: 'ok', data: result});
     });
 }
 
@@ -60,6 +60,6 @@ function saveBookToDB(req, res, next) {
         }
 
         // Repond to request indicating the book was created
-        res.json({ payload: book});
+        res.json({ data: book});
     });
 }
