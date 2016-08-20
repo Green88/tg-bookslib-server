@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var http = require('http');
 var router = require('./router');
 var mongoose = require('mongoose');
+var cors = require('cors');
 
 var app = express();
 
@@ -16,7 +17,7 @@ mongoose.connect('mongodb://taniatest:taniatest@ds145355.mlab.com:45355/bookslib
 //App settings
 
 app.use(morgan('combined'));
-//app.use(cors());
+app.use(cors());
 app.use(bodyParser.json({ type: '*/*' }));
 router(app);
 
