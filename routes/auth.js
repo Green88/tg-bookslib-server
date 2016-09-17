@@ -3,6 +3,7 @@
  */
 
 var AuthModel = require('../dbModels/AuthModel');
+var ProfileModel = require('../dbModels/ProfileModel');
 var UserPermission = require('../enums/user-permission').ENUM;
 var uuid = require('node-uuid');
 
@@ -49,7 +50,23 @@ function signup(req, res) {
                 return;
             }
 
-            res.json(response);
+            var profile = new ProfileModel({
+                userId: response.userId,
+                name: '',
+                bio: '',
+                imageUrl: '',
+                isAuthor: false,
+                books: []
+            });
+
+            profile.save(function onProfileCreated(error, profile) {
+                if(error) {
+                    next(error);
+                    return;
+                }
+                res.json(profile);
+            });
+
         });
     });
 }
