@@ -4,7 +4,9 @@ var Schema = mongoose.Schema;
 
 var authSchema = new Schema({
     email: String,
-    password: String
+    password: String,
+    userId: String,
+    permission: String
 });
 
 
