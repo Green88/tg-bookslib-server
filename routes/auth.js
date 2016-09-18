@@ -25,6 +25,11 @@ function signup(req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
+    if(!email || !password) {
+        res.status(404).send({error: 'No credentials sent'});
+        return;
+    }
+
     AuthModel.findOne({email: email}, function onGotResponse(error, response) {
         if(error) {
             next(error);

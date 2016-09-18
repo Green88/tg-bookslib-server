@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Green88/tg-bookslib-server#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "cors": "^2.8.0",
     "express": "^4.14.0",
