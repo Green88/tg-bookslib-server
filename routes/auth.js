@@ -6,6 +6,7 @@ var AuthModel = require('../dbModels/AuthModel');
 var ProfileModel = require('../dbModels/ProfileModel');
 var UserPermission = require('../enums/user-permission').ENUM;
 var uuid = require('node-uuid');
+var jwtResolver = require('../util/jwt/token');
 
 /**
  * @param {App} app
@@ -55,22 +56,27 @@ function signup(req, res) {
                 return;
             }
 
-            var profile = new ProfileModel({
-                userId: response.userId,
-                name: '',
-                bio: '',
-                imageUrl: '',
-                isAuthor: false,
-                books: []
+            res.json({
+                token: jwtResolver.getToken(response),
+                id: response.userId
             });
 
-            profile.save(function onProfileCreated(error, profile) {
-                if(error) {
-                    next(error);
-                    return;
-                }
-                res.json(profile);
-            });
+            // var profile = new ProfileModel({
+            //     userId: response.userId,
+            //     name: '',
+            //     bio: '',
+            //     imageUrl: '',
+            //     isAuthor: false,
+            //     books: []
+            // });
+            //
+            // profile.save(function onProfileCreated(error, profile) {
+            //     if(error) {
+            //         next(error);
+            //         return;
+            //     }
+            //     res.json(profile);
+            // });
 
         });
     });
