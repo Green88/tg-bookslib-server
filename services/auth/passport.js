@@ -1,6 +1,6 @@
 const passport = require('passport');
-const User = require('../models/user');
-const config = require('../config');
+const AuthModel = require('../../dbModels/AuthModel');
+const config = require('../../config');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local');
@@ -11,7 +11,7 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
     // Verify this email and password, call done with the user
     // if it is the correct email and password
     // otherwise, call done with false
-    User.findOne({ email: email }, function(err, user) {
+    AuthModel.findOne({ email: email }, function(err, user) {
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
 
@@ -36,7 +36,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
     // See if the user ID in the payload exists in our database
     // If it does, call 'done' with that other
     // otherwise, call done without a user object
-    User.findById(payload.sub, function(err, user) {
+    AuthModel.findById(payload.sub, function(err, user) {
         if (err) { return done(err, false); }
 
         if (user) {
