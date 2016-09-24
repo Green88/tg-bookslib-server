@@ -1,5 +1,5 @@
 
-var Book = require('../dbModels/BookModel');
+var Book = require('../dbModels/BookModel').BookModel;
 var uuid = require('node-uuid');
 
 /**

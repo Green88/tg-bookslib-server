@@ -8,7 +8,7 @@ var UserPermission = require('../enums/user-permission').ENUM;
 var uuid = require('node-uuid');
 var jwtResolver = require('../util/jwt/token');
 
-const passportService = require('./services/passport');
+const passportService = require('../services/auth/passport');
 const passport = require('passport');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
@@ -22,6 +22,7 @@ module.exports = function(app) {
 
     app.post('/signup', signup);
 
+    // route model for any route that needs auth
     app.get('/authRoute', requireAuth, authRoute);
 
 };
@@ -61,7 +62,7 @@ function signup(req, res) {
             email: email,
             password: password,
             permission: UserPermission.NONE,
-            userId: 123
+            userId: req.body.userId
         });
 
         user.save(function onSaved(error, response) {

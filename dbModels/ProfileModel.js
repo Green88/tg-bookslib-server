@@ -3,7 +3,6 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var BookModel = require('./BookModel');
 
 var profileSchema = new Schema({
     userId: String,
@@ -11,7 +10,7 @@ var profileSchema = new Schema({
     bio: String,
     imageUrl: String,
     isAuthor: Boolean,
-    books: [BookModel]
+    books: [String]
 });
 
 

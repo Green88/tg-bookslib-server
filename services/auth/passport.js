@@ -36,7 +36,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
     // See if the user ID in the payload exists in our database
     // If it does, call 'done' with that other
     // otherwise, call done without a user object
-    AuthModel.findById(payload.sub, function(err, user) {
+    AuthModel.findOne({userId: payload.sub}, function(err, user) {
         if (err) { return done(err, false); }
 
         if (user) {
