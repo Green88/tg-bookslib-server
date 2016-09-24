@@ -8,18 +8,32 @@ var UserPermission = require('../enums/user-permission').ENUM;
 var uuid = require('node-uuid');
 var jwtResolver = require('../util/jwt/token');
 
+const passportService = require('./services/passport');
+const passport = require('passport');
+
+const requireAuth = passport.authenticate('jwt', { session: false });
+const requireSignin = passport.authenticate('local', { session: false });
+
 /**
  * @param {App} app
  */
 module.exports = function(app) {
-    app.post('/signin', signin);
+    app.post('/signin', requireSignin, signin);
 
     app.post('/signup', signup);
 
+    app.get('/authRoute', requireAuth, authRoute);
+
 };
 
-function signin(req, res, next) {
+function authRoute(req, res) {
+    res.send({ message: 'This route requires auth' });
+}
 
+function signin(req, res, next) {
+    res.send({
+        token: jwtResolver.getToken(req.user),
+        id: req.user.userId});
 }
 
 function signup(req, res) {
