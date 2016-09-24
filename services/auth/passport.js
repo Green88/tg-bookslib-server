@@ -16,7 +16,7 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
         if (!user) { return done(null, false); }
 
         // compare passwords - is `password` equal to user.password?
-        AuthModel.comparePassword(password, function(err, isMatch) {
+        user.comparePassword(password, function(err, isMatch) {
             if (err) { return done(err); }
             if (!isMatch) { return done(null, false); }
 
