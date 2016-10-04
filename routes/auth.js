@@ -5,36 +5,96 @@
 var AuthModel = require('../dbModels/AuthModel');
 var ProfileModel = require('../dbModels/ProfileModel');
 var UserPermission = require('../enums/user-permission').ENUM;
+var RestResponse = require('../rest/RestResponse');
 var uuid = require('node-uuid');
 var jwtResolver = require('../util/jwt/token');
-
-const passportService = require('../services/auth/passport');
-const passport = require('passport');
-
-const requireAuth = passport.authenticate('jwt', { session: false });
-const requireSignin = passport.authenticate('local', { session: false });
 
 /**
  * @param {App} app
  */
 module.exports = function(app) {
-    app.post('/signin', requireSignin, signin);
+    app.post('/signin', signin);
 
     app.post('/signup', signup);
 
     // route model for any route that needs auth
-    app.get('/authRoute', requireAuth, authRoute);
+    app.get('/authRoute', authRoute);
 
 };
 
 function authRoute(req, res) {
-    res.send({ message: 'This route requires auth' });
+    var token = req.headers.authorization || null;
+    if(!token) {
+        RestResponse.unauthorized(res);
+        return;
+    }
+
+    var extracted = null;
+    try {
+        extracted = jwtResolver.extractUserIdFromToken(token);
+
+    } catch(error) {
+        console.log(error);
+        RestResponse.unauthorized(res);
+        return;
+    }
+
+    AuthModel.findOne({userId: extracted.sub}, function(error, user) {
+        if (error) {
+            RestResponse.serverError(res, error);
+            return;
+        }
+
+        if(!user) {
+            RestResponse.notFound(res, 'user');
+            return;
+        }
+
+        RestResponse.ok(res, {message: 'This route requires auth'});
+
+    });
+
 }
 
-function signin(req, res, next) {
-    res.send({
-        token: jwtResolver.getToken(req.user),
-        id: req.user.userId});
+function signin(req, res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    if(!email || !password) {
+        RestResponse.badRequest(res, ['email', 'password']);
+        return;
+    }
+
+    AuthModel.findOne({email: email}, function onUserFound(error, user) {
+        if(error) {
+            RestResponse.serverError(res, error);
+            return;
+        }
+
+        if(!user) {
+            RestResponse.notFound(res, 'user');
+            return;
+        }
+
+        user.comparePassword(password, function(error, isMatch) {
+            if (error) {
+                RestResponse.serverError(res, error);
+                return;
+            }
+            if (!isMatch) {
+                RestResponse.unauthorized(res);
+                return;
+            }
+
+            var data = {
+                token: jwtResolver.getToken(user),
+                id: user.userId
+            };
+            RestResponse.ok(res, data);
+        });
+    });
+
+
 }
 
 function signup(req, res) {
@@ -42,19 +102,19 @@ function signup(req, res) {
     var password = req.body.password;
 
     if(!email || !password) {
-        res.status(404).send({error: 'No credentials sent'});
+        RestResponse.badRequest(res, ['email', 'password']);
         return;
     }
 
-    AuthModel.findOne({email: email}, function onGotResponse(error, response) {
+    AuthModel.findOne({email: email}, function onGotResponse(error, auth) {
         if(error) {
-            next(error);
+            RestResponse.serverError(res, error);
             return;
         }
 
-        if(response) {
+        if(auth) {
             // user already exists - conflict error code
-            res.status(409).send({error: 'Email already exists'});
+            RestResponse.conflict(res, ['user']);
             return;
         }
 
@@ -65,34 +125,16 @@ function signup(req, res) {
             userId: req.body.userId
         });
 
-        user.save(function onSaved(error, response) {
+        user.save(function onUserSaved(error, user) {
             if(error) {
-                next(error);
+                RestResponse.serverError(res, error);
                 return;
             }
-
-            res.json({
-                token: jwtResolver.getToken(response),
-                id: response.userId
-            });
-
-            // var profile = new ProfileModel({
-            //     userId: response.userId,
-            //     name: '',
-            //     bio: '',
-            //     imageUrl: '',
-            //     isAuthor: false,
-            //     books: []
-            // });
-            //
-            // profile.save(function onProfileCreated(error, profile) {
-            //     if(error) {
-            //         next(error);
-            //         return;
-            //     }
-            //     res.json(profile);
-            // });
-
+            var data = {
+                token: jwtResolver.getToken(user),
+                id: user.userId
+            };
+            RestResponse.ok(res, data);
         });
     });
 }

@@ -1,5 +1,6 @@
 
-var Book = require('../dbModels/BookModel').BookModel;
+var Book = require('../dbModels/BookModel');
+var RestResponse = require('../rest/RestResponse');
 var uuid = require('node-uuid');
 
 /**
@@ -13,29 +14,30 @@ module.exports = function(app) {
     app.post('/book', saveBookToDB);
 };
 
-function getAllBooks(req, res, next) {
-    Book.find({}, function(err, result) {
-        if(err) {
-            console.log(err);
-            return next(err);
+function getAllBooks(req, res) {
+    Book.find({}, function(error, result) {
+        if(error) {
+            RestResponse.serverError(res, error);
+            return;
         }
 
-        res.send({result: 'ok', data: result});
+        RestResponse.ok(res, result);
     });
 }
 
-function getBookById(req, res, next) {
-    Book.findOne({bookId: req.params.bookId}, function(err, result) {
-        if(err) {
-            console.log(err);
-            return next(err);
+function getBookById(req, res) {
+    Book.findOne({bookId: req.params.bookId}, function(error, result) {
+        if(error) {
+            RestResponse.serverError(res, error);
+            return;
         }
 
-        res.send({result: 'ok', data: result});
+        RestResponse.ok(res, result);
     });
 }
 
-function saveBookToDB(req, res, next) {
+function saveBookToDB(req, res) {
+
     var book = new Book({
         bookId: req.body.bookId,
         title: req.body.title,
@@ -53,13 +55,12 @@ function saveBookToDB(req, res, next) {
     });
 
 
-    book.save(function(err) {
-        if (err) {
-            console.log(err);
-            return next(err);
+    book.save(function(error, book) {
+        if (error) {
+            RestResponse.serverError(res, error);
+            return;
         }
 
-        // Repond to request indicating the book was created
-        res.json({ data: book});
+        RestResponse.ok(res, book);
     });
 }

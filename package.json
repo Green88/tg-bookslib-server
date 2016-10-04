@@ -1,7 +1,7 @@
 {
   "name": "tg-bookslib-server",
   "version": "1.0.0",
-  "description": "Server code fpr awesome authors library",
+  "description": "Server code for awesome authors library",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,6 +27,7 @@
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-jwt": "^2.1.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "underscore": "^1.8.3"
   }
 }
