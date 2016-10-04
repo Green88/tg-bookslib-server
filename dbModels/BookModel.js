@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var bookSchema = new Schema({
-    bookId: String,
     title: String,
     description: String,
     imageUrls: [String],
@@ -14,7 +13,7 @@ var bookSchema = new Schema({
     finished: Boolean,
     rating: Number,
     author: {
-        authorId: String,
+        authorId: Schema.Types.ObjectId,
         name: String,
         imageUrl: String
     }

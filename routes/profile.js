@@ -46,8 +46,7 @@ function createProfile(req, res) {
         name: '',
         bio: '',
         imageUrl: '',
-        isAuthor: false,
-        books: []
+        isAuthor: false
     });
 
     profile.save(function onProfileCreated(error, profile) {

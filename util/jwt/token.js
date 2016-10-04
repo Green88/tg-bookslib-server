@@ -7,7 +7,7 @@ var config = require('../../config');
 module.exports = {
     getToken: function(user) {
         var timestamp = new Date().getTime();
-        return jwt.encode({ sub: user.userId, iat: timestamp }, config.secret);
+        return jwt.encode({ sub: user._id, iat: timestamp }, config.secret);
     },
 
     extractUserIdFromToken: function(token) {

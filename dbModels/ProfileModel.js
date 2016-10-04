@@ -5,12 +5,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var profileSchema = new Schema({
-    userId: String,
+    userId: Schema.Types.ObjectId,
     name: String,
     bio: String,
     imageUrl: String,
-    isAuthor: Boolean,
-    books: [String]
+    isAuthor: Boolean
 });
 
 

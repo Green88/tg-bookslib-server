@@ -3,7 +3,6 @@
  */
 
 var AuthModel = require('../dbModels/AuthModel');
-var ProfileModel = require('../dbModels/ProfileModel');
 var UserPermission = require('../enums/user-permission').ENUM;
 var RestResponse = require('../rest/RestResponse');
 var uuid = require('node-uuid');
@@ -88,7 +87,7 @@ function signin(req, res) {
 
             var data = {
                 token: jwtResolver.getToken(user),
-                id: user.userId
+                id: user._id
             };
             RestResponse.ok(res, data);
         });
@@ -121,8 +120,7 @@ function signup(req, res) {
         var user = new AuthModel({
             email: email,
             password: password,
-            permission: UserPermission.NONE,
-            userId: req.body.userId
+            permission: UserPermission.NONE
         });
 
         user.save(function onUserSaved(error, user) {
@@ -132,7 +130,7 @@ function signup(req, res) {
             }
             var data = {
                 token: jwtResolver.getToken(user),
-                id: user.userId
+                id: user._id
             };
             RestResponse.ok(res, data);
         });
