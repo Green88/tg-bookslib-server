@@ -3,6 +3,8 @@
  */
 var _ = require('underscore');
 
+//TODO: set up normal logger
+
 /**
  * @typedef {{
  *  errorId: number,
@@ -89,7 +91,8 @@ function forbidden(res) {
  * @param {Array.<string>=} invalidParams
  */
 function badRequest(res, invalidParams) {
-    logger.warn('bad request' + (invalidParams ? ' invalid params: ' + invalidParams.join(', ') : ''));
+    //logger.warn('bad request' + (invalidParams ? ' invalid params: ' + invalidParams.join(', ') : ''));
+    console.error('bad request' + (invalidParams ? ' invalid params: ' + invalidParams.join(', ') : ''));
     res.status(400).json({
         errorId: 400,
         message: 'bad request' + (invalidParams ? ' invalid params: ' + invalidParams.join(', ') : ''),
@@ -116,7 +119,8 @@ function conflict(res, invalidParams, errorId) {
  */
 function serverError(res, error) {
     if (_.isObject(error)) {
-        logger.error(error);
+        //logger.error(error);
+        console.error(error);
     }
     res.status(500).json({
         errorId: 500,

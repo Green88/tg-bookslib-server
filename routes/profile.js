@@ -34,7 +34,7 @@ function getProfileById(req, res) {
 }
 
 function createProfile(req, res) {
-    var id = req.params.id;
+    var id = req.body.id;
 
     if(!id) {
         RestResponse.badRequest(res, ['id']);

@@ -4,8 +4,10 @@
 
 var booksRoutes = require('./routes/books');
 var authRoutes = require('./routes/auth');
+var profileRoutes = require('./routes/profile');
 
 module.exports = function(app) {
     booksRoutes(app);
     authRoutes(app);
+    profileRoutes(app);
 };
