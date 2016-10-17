@@ -16,6 +16,10 @@ module.exports = function(app) {
 
     app.post('/signup', signup);
 
+    app.get('/user/get', getUserByToken);
+
+    app.get('/validate/:username', validateUsernameTaken);
+
     // route model for any route that needs auth
     app.get('/authRoute', authRoute);
 
@@ -55,6 +59,64 @@ function authRoute(req, res) {
 
 }
 
+function validateUsernameTaken(req, res) {
+    var username = req.params.username;
+
+    if(!username) {
+        RestResponse.badRequest(res, ['username']);
+        return;
+    }
+
+    AuthModel.findOne({username: username}, function(error, user) {
+        if (error) {
+            RestResponse.serverError(res, error);
+            return;
+        }
+
+        if (user) {
+            RestResponse.conflict(res, ['user']);
+            return;
+        }
+
+        RestResponse.ok(res, username);
+    });
+}
+
+function getUserByToken(req, res) {
+    var token = req.headers.authorization || null;
+    if(!token) {
+        RestResponse.unauthorized(res);
+        return;
+    }
+
+    var extracted = null;
+    try {
+        extracted = jwtResolver.extractUserIdFromToken(token);
+
+    } catch(error) {
+        console.log(error);
+        RestResponse.unauthorized(res);
+        return;
+    }
+
+    AuthModel.findById(extracted.sub, function(error, user) {
+        if (error) {
+            RestResponse.serverError(res, error);
+            return;
+        }
+
+        if(!user) {
+            RestResponse.notFound(res, 'user');
+            return;
+        }
+
+        var data = _composeUserData(token, user);
+
+        RestResponse.ok(res, data);
+
+    });
+}
+
 function signin(req, res) {
     var email = req.body.email;
     var password = req.body.password;
@@ -85,10 +147,7 @@ function signin(req, res) {
                 return;
             }
 
-            var data = {
-                token: jwtResolver.getToken(user),
-                id: user._id
-            };
+            var data = _composeUserData(jwtResolver.getToken(user), user);
             RestResponse.ok(res, data);
         });
     });
@@ -99,9 +158,10 @@ function signin(req, res) {
 function signup(req, res) {
     var email = req.body.email;
     var password = req.body.password;
+    var username = req.body.username;
 
-    if(!email || !password) {
-        RestResponse.badRequest(res, ['email', 'password']);
+    if(!email || !password || !username) {
+        RestResponse.badRequest(res, ['email', 'password', 'username']);
         return;
     }
 
@@ -120,6 +180,7 @@ function signup(req, res) {
         var user = new AuthModel({
             email: email,
             password: password,
+            username: username,
             permission: UserPermission.NONE
         });
 
@@ -128,11 +189,23 @@ function signup(req, res) {
                 RestResponse.serverError(res, error);
                 return;
             }
-            var data = {
-                token: jwtResolver.getToken(user),
-                id: user._id
-            };
+            var data = _composeUserData(jwtResolver.getToken(user), user);
             RestResponse.ok(res, data);
         });
     });
+}
+/**
+ * @param {string} token
+ * @param {Object} user
+ * @private
+ */
+function _composeUserData(token, user) {
+    return {
+        token: token,
+        user: {
+            id: user._id,
+            username: user.username,
+            permission: user.permission
+        }
+    };
 }

@@ -23,9 +23,14 @@ function getProfileById(req, res) {
         return;
     }
 
-    ProfileModel.findOne({id: id}, function onFoundProfile(error, profile) {
+    ProfileModel.findOne({userId: id}, function onFoundProfile(error, profile) {
         if(error) {
             RestResponse.serverError(res, error);
+            return;
+        }
+
+        if(!profile) {
+            RestResponse.notFound(res, 'profile');
             return;
         }
 
@@ -35,6 +40,7 @@ function getProfileById(req, res) {
 
 function createProfile(req, res) {
     var id = req.body.id;
+    var username = req.body.username;
 
     if(!id) {
         RestResponse.badRequest(res, ['id']);
@@ -43,6 +49,7 @@ function createProfile(req, res) {
 
     var profile = new ProfileModel({
         userId: id,
+        username: username,
         name: '',
         bio: '',
         imageUrl: '',
