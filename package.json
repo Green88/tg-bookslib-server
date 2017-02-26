@@ -4,6 +4,7 @@
   "description": "Server code for awesome authors library",
   "main": "index.js",
   "scripts": {
+    "start": "./node_modules/.bin/nodemon -e js ./index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,5 +30,8 @@
     "passport-jwt": "^2.1.0",
     "passport-local": "^1.0.0",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
