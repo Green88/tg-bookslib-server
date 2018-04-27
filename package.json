@@ -2,7 +2,7 @@
   "name": "tg-bookslib-server",
   "version": "1.0.0",
   "description": "Server code for awesome authors library",
-  "main": "index.js",
+  "main": "./build/main.js",
   "engines": {
     "node": "8.1.1",
     "npm": "5.0.3"
