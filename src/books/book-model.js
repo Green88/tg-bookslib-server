@@ -1,10 +1,6 @@
-/**
- * Created by Tania on 08/08/16.
- */
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose, { Schema } from 'mongoose';
 
-var bookSchema = new Schema({
+const bookSchema = new Schema({
     title: String,
     description: String,
     imageUrls: [String],
@@ -21,7 +17,7 @@ var bookSchema = new Schema({
 
 
 // Create the model class
-var BookModel = mongoose.model('book', bookSchema);
+const Book = mongoose.model('book', bookSchema);
 
 // Export the model
-module.exports = BookModel;
+export default Book;

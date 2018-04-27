@@ -1,9 +1,9 @@
 
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt-nodejs';
+const Schema = mongoose.Schema;
 
-var authSchema = new Schema({
+const authSchema = new Schema({
     email: { type: String, unique: true, lowercase: true },
     username: {type: String, unique: true, lowercase: true},
     password: String,
@@ -38,7 +38,7 @@ authSchema.methods.comparePassword = function(candidatePassword, callback) {
 };
 
 // Create the model class
-var AuthModel = mongoose.model('auth', authSchema);
+const AuthModel = mongoose.model('auth', authSchema);
 
 // Export the model
 module.exports = AuthModel;

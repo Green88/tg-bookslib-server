@@ -1,7 +1,4 @@
-/**
- * Created by Tania on 08/08/16.
- */
-var uuid = require('node-uuid');
+import uuid from 'node-uuid';
 
 /**
  * @constructor

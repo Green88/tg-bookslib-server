@@ -1,12 +1,7 @@
-/**
- * Created by Tania on 30/08/16.
- */
-
-var AuthModel = require('../dbModels/AuthModel');
-var UserPermission = require('../enums/user-permission').ENUM;
-var RestResponse = require('../rest/RestResponse');
-var uuid = require('node-uuid');
-var jwtResolver = require('../util/jwt/token');
+import AuthModel from './auth-model';
+import UserPermission from '../users/user-permission';
+import RestResponse from '../utils/rest/RestResponse';
+import jwtResolver from '../utils/jwt/token';
 
 /**
  * @param {App} app
@@ -26,13 +21,13 @@ module.exports = function(app) {
 };
 
 function authRoute(req, res) {
-    var token = req.headers.authorization || null;
+    const token = req.headers.authorization || null;
     if(!token) {
         RestResponse.unauthorized(res);
         return;
     }
 
-    var extracted = null;
+    let extracted = null;
     try {
         extracted = jwtResolver.extractUserIdFromToken(token);
 
@@ -60,7 +55,7 @@ function authRoute(req, res) {
 }
 
 function validateUsernameTaken(req, res) {
-    var username = req.params.username;
+    const username = req.params.username;
 
     if(!username) {
         RestResponse.badRequest(res, ['username']);
@@ -83,13 +78,13 @@ function validateUsernameTaken(req, res) {
 }
 
 function getUserByToken(req, res) {
-    var token = req.headers.authorization || null;
+    const token = req.headers.authorization || null;
     if(!token) {
         RestResponse.unauthorized(res);
         return;
     }
 
-    var extracted = null;
+    let extracted = null;
     try {
         extracted = jwtResolver.extractUserIdFromToken(token);
 
@@ -110,7 +105,7 @@ function getUserByToken(req, res) {
             return;
         }
 
-        var data = _composeUserData(token, user);
+        const data = _composeUserData(token, user);
 
         RestResponse.ok(res, data);
 
@@ -118,8 +113,8 @@ function getUserByToken(req, res) {
 }
 
 function signin(req, res) {
-    var email = req.body.email;
-    var password = req.body.password;
+    const email = req.body.email;
+    const password = req.body.password;
 
     if(!email || !password) {
         RestResponse.badRequest(res, ['email', 'password']);
@@ -147,7 +142,7 @@ function signin(req, res) {
                 return;
             }
 
-            var data = _composeUserData(jwtResolver.getToken(user), user);
+            const data = _composeUserData(jwtResolver.getToken(user), user);
             RestResponse.ok(res, data);
         });
     });
@@ -156,9 +151,9 @@ function signin(req, res) {
 }
 
 function signup(req, res) {
-    var email = req.body.email;
-    var password = req.body.password;
-    var username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const username = req.body.username;
 
     if(!email || !password || !username) {
         RestResponse.badRequest(res, ['email', 'password', 'username']);
@@ -177,7 +172,7 @@ function signup(req, res) {
             return;
         }
 
-        var user = new AuthModel({
+        const user = new AuthModel({
             email: email,
             password: password,
             username: username,
@@ -189,7 +184,7 @@ function signup(req, res) {
                 RestResponse.serverError(res, error);
                 return;
             }
-            var data = _composeUserData(jwtResolver.getToken(user), user);
+            const data = _composeUserData(jwtResolver.getToken(user), user);
             RestResponse.ok(res, data);
         });
     });

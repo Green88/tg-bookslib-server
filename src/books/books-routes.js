@@ -1,7 +1,5 @@
-
-var Book = require('../dbModels/BookModel');
-var RestResponse = require('../rest/RestResponse');
-var uuid = require('node-uuid');
+import Book from './book-model';
+import RestResponse from '../utils/rest/RestResponse';
 
 /**
  * @param {App} app
@@ -37,8 +35,7 @@ function getBookById(req, res) {
 }
 
 function saveBookToDB(req, res) {
-
-    var book = new Book({
+    const book = new Book({
         bookId: req.body.bookId,
         title: req.body.title,
         description: req.body.description,

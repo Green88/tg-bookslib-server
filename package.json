@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "dev": "backpack"
   },
   "repository": {
     "type": "git",
@@ -22,17 +22,20 @@
   },
   "homepage": "https://github.com/Green88/tg-bookslib-server#readme",
   "dependencies": {
+    "backpack-core": "^0.7.0",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.15.2",
-    "cors": "^2.8.0",
-    "express": "^4.14.0",
-    "jwt-simple": "^0.5.0",
-    "mongoose": "^4.5.8",
-    "morgan": "^1.7.0",
-    "node-uuid": "^1.4.7",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "jwt-simple": "^0.5.1",
+    "mongoose": "^4.13.12",
+    "morgan": "^1.9.0",
+    "node-uuid": "^1.4.8",
     "passport": "^0.3.2",
-    "passport-jwt": "^2.1.0",
+    "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0",
-    "underscore": "^1.8.3"
+    "shortid": "^2.2.8",
+    "underscore": "^1.9.0"
   }
 }
