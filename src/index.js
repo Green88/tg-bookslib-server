@@ -1,17 +1,17 @@
-import 'dotenv/config';
+// import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import http from 'http';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { mongoPassword, mongoUser, dbName } from '../src/config';
+import keys from '../src/config';
 import router from './router';
 
 const app = express();
 
 //Mongo settings
-mongoose.connect(`mongodb://${mongoUser}:${mongoPassword}@ds259499.mlab.com:59499/${dbName}`);
+mongoose.connect(`mongodb://${keys.mongoUser}:${keys.mongoPassword}@ds259499.mlab.com:59499/${keys.dbName}`);
 
 //App settings
 app.use(morgan('combined'));

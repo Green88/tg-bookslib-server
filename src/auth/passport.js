@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import LocalStrategy from 'passport-local';
 import AuthModel from './auth-model';
-import { JWT_SECRET } from '../config';
+import keys from '../config';
 
 // Create local strategy
 const localOptions = { usernameField: 'email' };
@@ -35,7 +35,7 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
 // Setup options for JWT Strategy
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-    secretOrKey: JWT_SECRET
+    secretOrKey: keys.jwtSecret
 };
 
 // Create JWT strategy
