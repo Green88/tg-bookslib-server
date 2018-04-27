@@ -1,4 +1,3 @@
-// import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
@@ -11,7 +10,9 @@ import router from './router';
 const app = express();
 
 //Mongo settings
-mongoose.connect(`mongodb://${keys.mongoUser}:${keys.mongoPassword}@ds259499.mlab.com:59499/${keys.dbName}`);
+mongoose.connect(keys.mongoUrl);
+
+mongodb://<dbuser>:<dbpassword>@ds159509.mlab.com:59509/bookslib-db-stage
 
 //App settings
 app.use(morgan('combined'));
