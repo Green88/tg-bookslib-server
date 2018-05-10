@@ -1,0 +1,32 @@
+import User from './user-model';
+import RestResponse from '../../utils/rest/RestResponse';
+
+export default (app) => {
+    app.get('/users/:id', getUserById);
+
+    app.put('/users/:id', updateUser);
+};
+
+const getUserById = async(req, res) => {
+    const id = req.params.id;
+    if(!id) {
+        RestResponse.badRequest(req, ['id']);
+        return;
+    }
+
+    const user = await User.findOne({userId: id});
+    if(!user) {
+        RestResponse.notFound(res, 'user');
+        return;
+    }
+
+    RestResponse.ok(res, user);
+}
+
+
+const updateUser = async (req, res) => {
+    const id = req.params.id;
+    const userData = req.body.data;
+    const updated = await User.updateOne({ id }, userData );
+    RestResponse.ok(res, updated);
+};

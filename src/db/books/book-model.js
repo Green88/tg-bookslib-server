@@ -8,11 +8,7 @@ const bookSchema = new Schema({
     genre: String,
     finished: Boolean,
     rating: Number,
-    author: {
-        authorId: Schema.Types.ObjectId,
-        name: String,
-        imageUrl: String
-    }
+    authorId: String
 });
 
 

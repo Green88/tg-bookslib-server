@@ -1,16 +1,18 @@
-
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
-const Schema = mongoose.Schema;
 
-const authSchema = new Schema({
+const userSchema = new Schema({
     email: { type: String, unique: true, lowercase: true },
     username: {type: String, unique: true, lowercase: true},
     password: String,
-    permission: String
+    permission: String,
+    name: String,
+    bio: String,
+    imageUrl: String,
+    isAuthor: Boolean
 });
 
-authSchema.pre('save', function(next) {
+userSchema.pre('save', function(next) {
     // get access to the user model
     const user = this;
 
@@ -29,7 +31,7 @@ authSchema.pre('save', function(next) {
     });
 });
 
-authSchema.methods.comparePassword = function(candidatePassword, callback) {
+userSchema.methods.comparePassword = function(candidatePassword, callback) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if (err) { return callback(err); }
 
@@ -37,8 +39,8 @@ authSchema.methods.comparePassword = function(candidatePassword, callback) {
     });
 };
 
-// Create the model class
-const AuthModel = mongoose.model('auth', authSchema);
 
-// Export the model
-module.exports = AuthModel;
+// Create the model class
+const User = mongoose.model('user', userSchema);
+
+export default User;
