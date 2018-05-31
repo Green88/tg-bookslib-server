@@ -1,9 +1,9 @@
-import booksRoutes from './books/books-routes';
-import authRoutes from './auth/auth-routes';
-import profileRoutes from './users/users-routes';
+import booksRoutes from './db/books/books-routes';
+import authRoutes from './db/auth/auth-routes';
+import usersRoutes from './db/users/users-routes';
 
-module.exports = function(app) {
+export default (app) => {
     booksRoutes(app);
     authRoutes(app);
-    profileRoutes(app);
+    usersRoutes(app);
 };
