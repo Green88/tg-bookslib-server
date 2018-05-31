@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import isObject from 'lodash/isObject';
 
 //TODO: set up normal logger
 
@@ -75,7 +75,7 @@ export default class RestResponse {
     }
 
     static serverError(res, error) {
-        if (_.isObject(error)) {
+        if (isObject(error)) {
             //logger.error(error);
             console.error(error);
         }
