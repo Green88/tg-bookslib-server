@@ -2,6 +2,7 @@ import UserModel from '../users/user-model';
 import UserPermission from '../users/user-permission';
 import RestResponse from '../../utils/rest/RestResponse';
 import jwtResolver from '../../utils/jwt/token';
+import hash from '../../utils/hash/hash';
 
 
 export default (app) => {
@@ -45,39 +46,38 @@ const getUserByToken = async (req, res) => {
         return;
     }
 
-    const data = _composeUserData(token, user);
+    const data = _formatUserResponse(token, user);
 
     RestResponse.ok(res, data);
 };
 
 const signin = async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
 
-    const user = UserModel.findOne({email: email});
+    const user = await UserModel.findOne({ email });
     if(!user) {
         RestResponse.notFound(res, 'user');
         return;
     }
-    const isMatch = await user.comparePassword(password);
+
+    const isMatch = await hash.comparePassword(password, user.password);
     if (!isMatch) {
         RestResponse.unauthorized(res);
         return;
     }
-    const data = _composeUserData(jwtResolver.getToken(user), user);
+    const data = _formatUserResponse(jwtResolver.getToken(user), user);
     RestResponse.ok(res, data);
 };
 
 const signup = async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const username = req.body.username;
+    const { email, password, username }  = req.body;
 
     if(!email || !password || !username) {
         RestResponse.badRequest(res, ['email', 'password', 'username']);
         return;
     }
 
+    const hashedPwd = await hash.hashPassword(password);
     const exist = await UserModel.findOne({email: email});
     if(exist) {
         // user already exists - conflict error code
@@ -86,18 +86,18 @@ const signup = async (req, res) => {
     }
 
     const user = new UserModel({
-        email: email,
-        password: password,
-        username: username,
+        email,
+        username,
+        password: hashedPwd,
         permission: UserPermission.NONE
     });
 
     const saved = await user.save();
-    const data = _composeUserData(jwtResolver.getToken(user), user);
+    const data = _formatUserResponse(jwtResolver.getToken(saved), saved);
     RestResponse.ok(res, data);
 };
 
-const _composeUserData = (token, user) => ({
+const _formatUserResponse = (token, user) => ({
     token: token,
     user: {
         id: user._id,
