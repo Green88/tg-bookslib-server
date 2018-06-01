@@ -1,24 +1,29 @@
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import LocalStrategy from 'passport-local';
+import omit from 'lodash/omit';
 import UserModel from '../users/user-model';
 import keys from '../../config/index';
+import hash from '../../utils/hash/hash';
+import jwtResolver from '../../utils/jwt/token';
 
 // Create local strategy
-const localOptions = { usernameField: 'email' };
+const localOptions = { usernameField: 'email', session: false };
 
 const localLogin = new LocalStrategy(localOptions, async (email, password, done) => {
     const user = await UserModel.findOne({ email });
     if (!user) {
-        return done(null, null);
+        return done(new Error('User not found'), null);
     }
 
-    const isMatch = user.comparePassword(password);
+    const isMatch = await hash.comparePassword(password, user.password);
     if (!isMatch) {
-        return done(null, null);
+        return done(new Error('Wrong username or password'), null);
     }
 
-    return done(null, user);
+    const token = jwtResolver.getToken(user);
+    const authUser = Object.assign({}, user.toObject(), { token });
+    return done(null, omit(authUser, 'password'));
 });
 
 // Setup options for JWT Strategy
