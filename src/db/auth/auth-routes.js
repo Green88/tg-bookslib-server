@@ -1,3 +1,6 @@
+import omit from 'lodash/omit';
+import passport from 'passport';
+import passportService from './passport';
 import UserModel from '../users/user-model';
 import UserPermission from '../users/user-permission';
 import RestResponse from '../../utils/rest/RestResponse';
@@ -14,6 +17,7 @@ export default (app) => {
 
     app.get('/validate/:username', validateUsernameTaken);
 };
+
 
 const validateUsernameTaken = async (req, res) => {
     const username = req.params.username;
@@ -51,23 +55,14 @@ const getUserByToken = async (req, res) => {
     RestResponse.ok(res, data);
 };
 
-const signin = async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await UserModel.findOne({ email });
-    if(!user) {
-        RestResponse.notFound(res, 'user');
-        return;
-    }
-
-    const isMatch = await hash.comparePassword(password, user.password);
-    if (!isMatch) {
-        RestResponse.unauthorized(res);
-        return;
-    }
-    const data = _formatUserResponse(jwtResolver.getToken(user), user);
-    RestResponse.ok(res, data);
-};
+const signin = (req, res, next) =>
+    passport.authenticate('local', (err, data) => {
+        if(err) {
+            next(err);
+            return;
+        }
+        RestResponse.ok(res, data);
+    })(req, res, next)
 
 const signup = async (req, res) => {
     const { email, password, username }  = req.body;
@@ -93,15 +88,11 @@ const signup = async (req, res) => {
     });
 
     const saved = await user.save();
-    const data = _formatUserResponse(jwtResolver.getToken(saved), saved);
+    const data = _formatUserResponse(jwtResolver.getToken(saved), saved.toObject());
     RestResponse.ok(res, data);
 };
 
-const _formatUserResponse = (token, user) => ({
+const _formatUserResponse = (token, user) => omit({
     token: token,
-    user: {
-        id: user._id,
-        username: user.username,
-        permission: user.permission
-    }
-});
+    ...user
+}, 'password');

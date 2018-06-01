@@ -2,9 +2,16 @@ import User from './user-model';
 import RestResponse from '../../utils/rest/RestResponse';
 
 export default (app) => {
+    app.get('/users', getUsers);
+
     app.get('/users/:id', getUserById);
 
     app.put('/users/:id', updateUser);
+};
+
+const getUsers = async (req, res) => {
+    const users = await User.find({});
+    RestResponse.ok(res, users);
 };
 
 const getUserById = async(req, res) => {
