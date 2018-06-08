@@ -1,13 +1,22 @@
-import jwt from 'jwt-simple';
+import { sign, verify } from 'jsonwebtoken';
 import { jwtSecret} from '../../config';
+
+const options = {
+    expiresIn: '60 days',
+    issuer: 'tg bookslib'
+};
 
 module.exports = {
     getToken: function(user) {
-        const timestamp = new Date().getTime();
-        return jwt.encode({ sub: user._id, iat: timestamp }, jwtSecret);
+        const payload = {
+            userId: user._id,
+            permission: user.permission
+        };
+        return sign(payload, jwtSecret, options);
     },
 
     extractUserIdFromToken: function(token) {
-        return jwt.decode(token, jwtSecret);
+        const decoded = verify(token, jwtSecret);
+        return decoded.userId;
     }
 };
