@@ -8,12 +8,19 @@ import passport from 'passport';
 import keys from '../src/config';
 import router from './router';
 import errorSend from './middleware/error-send';
+import sendNotFound from './middleware/not-found-sender';
 
 const app = express();
 
 //Mongo settings
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoUrl, { useMongoClient: true });
+const mongoConfig = {
+    useMongoClient: true,
+    config: {
+        autoIndex: false
+    }
+};
+mongoose.connect(keys.mongoUrl, mongoConfig);
 
 //App settings
 app.use(morgan('combined'));
@@ -22,6 +29,7 @@ app.use(bodyParser.json({ type: '*/*' }));
 app.use(passport.initialize());
 app.use(passport.session());
 router(app);
+app.use(sendNotFound);
 app.use(errorSend);
 
 //server settings
