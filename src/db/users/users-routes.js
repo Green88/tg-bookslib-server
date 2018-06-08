@@ -28,7 +28,7 @@ const getUserById = async(req, res) => {
     }
 
     RestResponse.ok(res, user);
-}
+};
 
 
 const updateUser = async (req, res) => {
