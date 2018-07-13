@@ -34,7 +34,7 @@ const jwtOptions = {
 
 // Create JWT strategy
 const jwtLogin = new JwtStrategy(jwtOptions, async (payload, done) => {
-    const user = await UserModel.findOne({userId: payload.sub});
+    const user = await UserModel.findOne({userId: payload.userId});
     if (user) {
         done(null, user);
     } else {

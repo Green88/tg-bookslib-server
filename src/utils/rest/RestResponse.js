@@ -32,6 +32,14 @@ export default class RestResponse {
         });
     }
 
+    static pageNotFound(req, res) {
+        res.status(404).json({
+            errorId: 404,
+            message: req.url + ' not found',
+            payload: null
+        });
+    }
+
     static unauthorized(res) {
         res.status(401).json({
             errorId: 401,

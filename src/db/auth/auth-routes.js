@@ -44,7 +44,7 @@ const getUserByToken = async (req, res) => {
         return;
     }
 
-    const user = await UserModel.findById(extracted.sub);
+    const user = await UserModel.findById(extracted.userId);
     if (!user) {
         RestResponse.notFound(res, 'user');
         return;
