@@ -1,6 +1,5 @@
 import isObject from 'lodash/isObject';
-
-//TODO: set up normal logger
+import logger from '../logger';
 
 export default class RestResponse {
     static ok(res, payload) {
@@ -33,6 +32,7 @@ export default class RestResponse {
     }
 
     static pageNotFound(req, res) {
+        logger.error(`${req.url} not found`);
         res.status(404).json({
             errorId: 404,
             message: req.url + ' not found',
@@ -65,8 +65,6 @@ export default class RestResponse {
     }
 
     static badRequest(res, invalidParams) {
-        //logger.warn('bad request' + (invalidParams ? ' invalid params: ' + invalidParams.join(', ') : ''));
-        console.error('bad request' + (invalidParams ? ' invalid params: ' + invalidParams.join(', ') : ''));
         res.status(400).json({
             errorId: 400,
             message: 'bad request' + (invalidParams ? ' invalid params: ' + invalidParams.join(', ') : ''),
@@ -83,10 +81,6 @@ export default class RestResponse {
     }
 
     static serverError(res, error) {
-        if (isObject(error)) {
-            //logger.error(error);
-            console.error(error);
-        }
         res.status(500).json({
             errorId: 500,
             message: 'server error',

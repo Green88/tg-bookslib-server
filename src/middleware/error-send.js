@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import HTTP_STATUS_CODE from 'http-status-codes';
+import logger from '../utils/logger';
 
 const errorMapper = (error, request) => {
     error.data = request.data || {};
@@ -28,7 +29,7 @@ const errorMapper = (error, request) => {
             break;
     }
 
-    console.error(error);
+    logger.error(error);
 
     return error;
 };

@@ -1,5 +1,5 @@
 import express from 'express';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import http from 'http';
 import mongoose from 'mongoose';
@@ -9,6 +9,7 @@ import keys from '../src/config';
 import router from './router';
 import errorSend from './middleware/error-send';
 import sendNotFound from './middleware/not-found-sender';
+import requestLogger from './middleware/request-logger';
 
 const app = express();
 
@@ -23,11 +24,12 @@ const mongoConfig = {
 mongoose.connect(keys.mongoUrl, mongoConfig);
 
 //App settings
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 app.use(cors());
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(requestLogger);
 router(app);
 app.use(sendNotFound);
 app.use(errorSend);
