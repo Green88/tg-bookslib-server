@@ -47,7 +47,7 @@
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",
     "mongodb": "^3.1.6",
-    "mongodb-memory-server": "^1.9.3",
+    "mongodb-memory-server": "^1.9.1",
     "mongoose": "^4.13.17",
     "morgan": "^1.9.1",
     "node-uuid": "^1.4.8",
