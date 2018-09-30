@@ -1,0 +1,7 @@
+{
+  "rootDir": "../../",
+  "setupFiles": ["./test/jest/jest.setup.js"],
+  "globalSetup": "./test/jest/setup.js",
+  "globalTeardown": "./test/jest/teardown.js",
+  "testEnvironment": "./test/jest/mongo-environment.js"
+}

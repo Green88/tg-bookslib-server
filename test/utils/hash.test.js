@@ -14,3 +14,9 @@ test('Can compare passwords', async () => {
     const isMatch = await hash.comparePassword(pwd, hashed);
     expect(isMatch).toBeTruthy();
 });
+
+test('counts', () => {
+    const sum = 10;
+    expect(sum).toEqual(5 + 5);
+    console.log('running');
+});
