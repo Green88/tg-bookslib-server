@@ -58,7 +58,7 @@ const getUserByToken = async (req, res) => {
 const signin = (req, res, next) =>
     passport.authenticate('local', (err, data) => {
         if(err) {
-            next(err);
+            res.error(err);
             return;
         }
         RestResponse.ok(res, data);
