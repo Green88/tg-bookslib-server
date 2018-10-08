@@ -4,6 +4,7 @@ import cors from 'cors';
 import passport from 'passport';
 import router from './router';
 import errorSend from './middleware/error-send';
+import responseExtender from './middleware/response-extender';
 import sendNotFound from './middleware/not-found-sender';
 import requestLogger from './middleware/request-logger';
 import connectToMongo from './mongoDb';
@@ -19,8 +20,12 @@ app.use(cors());
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(requestLogger);
+app.use(responseExtender);
+
 router(app);
+
 app.use(sendNotFound);
 app.use(errorSend);
 
