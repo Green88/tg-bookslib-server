@@ -9,7 +9,7 @@ const errorMapper = (error, request) => {
 
     // In case if error was built correctly
     if (error.status) {
-        console.error(error);
+        logger.error(error.message);
         return error;
     }
 
@@ -28,8 +28,6 @@ const errorMapper = (error, request) => {
             error.name = 'InternalServerError';
             break;
     }
-
-    logger.error(error);
 
     return error;
 };

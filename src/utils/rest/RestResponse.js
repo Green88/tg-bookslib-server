@@ -1,4 +1,3 @@
-import isObject from 'lodash/isObject';
 import logger from '../logger';
 
 export default class RestResponse {
