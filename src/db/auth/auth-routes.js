@@ -6,6 +6,8 @@ import UserPermission from '../users/user-permission';
 import RestResponse from '../../utils/rest/RestResponse';
 import jwtResolver from '../../utils/jwt/token';
 import hash from '../../utils/hash/hash';
+import validate from '../../utils/joi/validation';
+import { validateUsernameTakenSchema, signupSchema } from './auth-validation';
 
 
 export default (app) => {
@@ -20,9 +22,14 @@ export default (app) => {
 
 
 const validateUsernameTaken = async (req, res) => {
-    const username = req.params.username;
+    const { username } = req.params;
+    const validationResult = validate(username, validateUsernameTakenSchema);
+    if (validationResult) {
+        RestResponse.badRequest(res, username);
+        return;
+    }
 
-    const user = await UserModel.findOne({username: username});
+    const user = await UserModel.findOne({ username });
 
     if (user) {
         RestResponse.conflict(res, ['user']);
@@ -66,6 +73,13 @@ const signin = (req, res, next) =>
 
 const signup = async (req, res) => {
     const { email, password, username }  = req.body;
+
+    const validationResult = validate({ email, password, username }, signupSchema);
+
+    if(validationResult) {
+        RestResponse.badRequest(res, [email, password, username]);
+        return;
+    }
 
     if(!email || !password || !username) {
         RestResponse.badRequest(res, ['email', 'password', 'username']);
