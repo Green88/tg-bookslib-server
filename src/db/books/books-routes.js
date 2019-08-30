@@ -1,10 +1,10 @@
-import Book from './book-model';
-import RestResponse from '../../utils/rest/RestResponse';
+const Book = require('./book-model');
+const RestResponse = require('../../utils/rest/RestResponse');
 
 /**
  * @param {App} app
  */
-export default app => {
+module.exports = app => {
     app.get('/books', getAllBooks);
 
     app.get('/books/:bookId', getBookById);

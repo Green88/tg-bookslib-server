@@ -1,11 +1,11 @@
-import passport from 'passport';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import LocalStrategy from 'passport-local';
-import omit from 'lodash/omit';
-import UserModel from '../users/user-model';
-import keys from '../../config/index';
-import hash from '../../utils/hash/hash';
-import jwtResolver from '../../utils/jwt/token';
+const passport = require('passport');
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
+const LocalStrategy = require('passport-local');
+const omit = require('lodash/omit');
+const UserModel = require('../users/user-model');
+const keys = require('../../config/index');
+const hash = require('../../utils/hash/hash');
+const jwtResolver = require('../../utils/jwt/token');
 
 // Create local strategy
 const localOptions = { usernameField: 'email', session: false };

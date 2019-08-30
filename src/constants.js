@@ -1,4 +1,4 @@
-import * as shortid from 'shortid';
+const shortid = require('shortid');
 
 export const id = {
     type: String,

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
-import HTTP_STATUS_CODE from 'http-status-codes';
-import logger from '../utils/logger';
+const HTTP_STATUS_CODE = require('http-status-codes');
+const logger = require('../utils/logger');
 
 const errorMapper = (error, request) => {
     error.data = request.data || {};
@@ -36,4 +36,4 @@ function errorSender(error, request, response, next) {
     return response.error(errorMapper(error, request), next);
 }
 
-export default errorSender;
+module.exports = errorSender;

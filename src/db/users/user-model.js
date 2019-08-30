@@ -1,7 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
-import { id, defaultSchemaOptions} from "../../constants";
+const mongoose = require('mongoose');
+const { id, defaultSchemaOptions} = require('../../constants');
 
-const userSchema = new Schema({
+const userSchema = mongoose.Schema({
     id,
     email: { type: String, unique: true, lowercase: true },
     username: {type: String, unique: true, lowercase: true},
@@ -16,4 +16,4 @@ const userSchema = new Schema({
 // Create the model class
 const User = mongoose.model('user', userSchema);
 
-export default User;
+module.exports = User;

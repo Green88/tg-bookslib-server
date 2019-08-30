@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import keys from './config';
-import logger from './utils/logger';
+const mongoose = require( 'mongoose');
+const keys = require( './config');
+const logger = require( './utils/logger');
 
 
 mongoose.Promise = global.Promise;
@@ -39,4 +39,4 @@ function connect() {
     });
 }
 
-export default connect;
+module.exports = connect;

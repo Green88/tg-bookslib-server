@@ -1,6 +1,6 @@
-import logger from '../logger';
+const logger = require('../logger');
 
-export default class RestResponse {
+class RestResponse {
     static ok(res, payload) {
 
         if (payload === undefined) {
@@ -87,3 +87,5 @@ export default class RestResponse {
         });
     }
 }
+
+module.exports = RestResponse;
