@@ -1,4 +1,4 @@
-import HTTP_STATUS_CODES from 'http-status-codes';
+const HTTP_STATUS_CODES = require('http-status-codes');
 
 const errorResponseModel = ({ name, status, message, details }) => ({
     status: status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
@@ -18,6 +18,6 @@ function extendResponse(request, response, next) {
     next();
 }
 
-export default extendResponse;
+module.exports = extendResponse;
 
 

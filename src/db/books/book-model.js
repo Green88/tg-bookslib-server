@@ -1,7 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
-import { id, defaultSchemaOptions} from "../../constants";
+const mongoose = require('mongoose');
+const { id, defaultSchemaOptions} = require('../../constants');
 
-const bookSchema = new Schema({
+const bookSchema = mongoose.Schema({
     id,
     title: String,
     description: String,
@@ -18,4 +18,4 @@ const bookSchema = new Schema({
 const Book = mongoose.model('book', bookSchema);
 
 // Export the model
-export default Book;
+module.exports = Book;

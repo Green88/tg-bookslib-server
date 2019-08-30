@@ -1,5 +1,5 @@
-import isString from 'lodash/isString';
-import hash from '../../src/utils/hash/hash';
+const isString = require('lodash/isString');
+const hash = require('../../src/utils/hash/hash');
 
 test('Can hash the password', async () => {
     const pwd = 'qwerty';

@@ -1,3 +1,3 @@
-import Joi from 'joi';
+const Joi = require('joi');
 
-export default (obj, schema) => Joi.validate(obj, schema);
+module.exports = (obj, schema) => Joi.validate(obj, schema);

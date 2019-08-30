@@ -1,8 +1,8 @@
-import booksRoutes from './db/books/books-routes';
-import authRoutes from './db/auth/auth-routes';
-import usersRoutes from './db/users/users-routes';
+const booksRoutes = require( './db/books/books-routes');
+const authRoutes = require( './db/auth/auth-routes');
+const usersRoutes = require( './db/users/users-routes');
 
-export default (app) => {
+module.exports = app => {
     booksRoutes(app);
     authRoutes(app);
     usersRoutes(app);

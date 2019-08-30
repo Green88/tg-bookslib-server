@@ -1,16 +1,16 @@
-import omit from 'lodash/omit';
-import passport from 'passport';
-import passportService from './passport';
-import UserModel from '../users/user-model';
-import UserPermission from '../users/user-permission';
-import RestResponse from '../../utils/rest/RestResponse';
-import jwtResolver from '../../utils/jwt/token';
-import hash from '../../utils/hash/hash';
-import validate from '../../utils/joi/validation';
-import { validateUsernameTakenSchema, signupSchema } from './auth-validation';
+const omit = require('lodash/omit');
+const passport = require('passport');
+const passportService = require('./passport');
+const UserModel = require('../users/user-model');
+const UserPermission = require('../users/user-permission');
+const RestResponse = require('../../utils/rest/RestResponse');
+const jwtResolver = require('../../utils/jwt/token');
+const hash = require('../../utils/hash/hash');
+const validate = require('../../utils/joi/validation');
+const { validateUsernameTakenSchema, signupSchema } = require('./auth-validation');
 
 
-export default (app) => {
+module.exports = (app) => {
     app.post('/signin', signin);
 
     app.post('/signup', signup);

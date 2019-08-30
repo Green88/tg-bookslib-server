@@ -1,7 +1,7 @@
-import User from './user-model';
-import RestResponse from '../../utils/rest/RestResponse';
+const User = require( './user-model');
+const RestResponse = require( '../../utils/rest/RestResponse');
 
-export default (app) => {
+module.exports = app => {
     app.get('/users', getUsers);
 
     app.get('/users/:id', getUserById);

@@ -1,5 +1,5 @@
-import isEmpty from 'lodash/isEmpty';
-import logger from '../utils/logger';
+const isEmpty = require('lodash/isEmpty');
+const logger = require('../utils/logger');
 
 
 function requestLogger({ method, params, query, body, url }, response, next) {
@@ -22,4 +22,4 @@ function requestLogger({ method, params, query, body, url }, response, next) {
     return next();
 }
 
-export default requestLogger;
+module.exports = requestLogger;
