@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt-nodejs';
+const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
     hashPassword: async (password) => {

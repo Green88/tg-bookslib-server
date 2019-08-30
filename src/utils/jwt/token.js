@@ -1,5 +1,5 @@
-import { sign, verify } from 'jsonwebtoken';
-import { jwtSecret} from '../../config';
+const { sign, verify } = require('jsonwebtoken');
+const { jwtSecret} = require('../../config');
 
 const options = {
     expiresIn: '60 days',
